@@ -1,0 +1,263 @@
+/* Dashboard specific styles overrides and additions */
+
+:root {
+    --table-header-bg: rgba(68, 129, 235, 0.2);
+    --table-row-hover: rgba(4, 190, 254, 0.1);
+    --input-border: rgba(255, 255, 255, 0.2);
+    --neon-blue: #04befe;
+    --neon-bg: rgba(4, 190, 254, 0.05);
+}
+
+.content-area {
+    width: 100%;
+    height: 100%;
+}
+
+.section-title {
+    color: var(--neon-blue);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--neon-blue);
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+/* Form Styles - Now Single Line Table-Like */
+.glass-form-container {
+    background: rgba(20, 20, 30, 0.6);
+    padding: 1.5rem;
+    /* Reduced padding */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    overflow-x: auto;
+    /* Allow horizontal scroll if needed */
+}
+
+/* Hiding original grid layout to make it one line */
+.form-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-bottom: 1rem;
+    align-items: flex-end;
+    /* Align inputs to bottom */
+    min-width: 100%;
+    /* Ensure it takes full width */
+}
+
+.input-group {
+    flex: 1;
+    /* Distribute space evenly initially */
+    min-width: 100px;
+    /* Minimum width for inputs */
+}
+
+/* Specific widths for smaller/larger fields */
+.input-group:nth-child(2) {
+    min-width: 150px;
+}
+
+/* Name */
+.input-group:nth-child(11) {
+    min-width: 200px;
+}
+
+/* Talking Note */
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #ccc;
+    font-size: 0.75rem;
+    /* Smaller labels */
+    white-space: nowrap;
+    /* Prevent label wrapping */
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--input-border);
+    padding: 8px 10px;
+    /* Compact padding */
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 10px rgba(4, 190, 254, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+}
+
+.input-group.highlight-input input {
+    border-color: #f39c12;
+    /* Different color for Next Call */
+    background: rgba(243, 156, 18, 0.1);
+}
+
+.btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: auto;
+    min-width: 150px;
+    margin: 1rem 0 0 auto;
+    /* Right align button */
+    background: linear-gradient(90deg, #4481eb, #04befe);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(4, 190, 254, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(4, 190, 254, 0.6);
+}
+
+/* Table Styles - Enhanced */
+.table-container {
+    background: rgba(20, 20, 30, 0.6);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.buyer-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+    /* Spacing between rows */
+}
+
+.buyer-table th {
+    background: var(--table-header-bg);
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 12px 15px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.buyer-table th:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.buyer-table th:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.buyer-table tbody tr {
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.2s;
+}
+
+.buyer-table tbody tr:hover {
+    background: var(--table-row-hover);
+    transform: scale(1.005);
+    /* Subtle zoom */
+}
+
+.buyer-table td {
+    padding: 12px 15px;
+    color: #ddd;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    white-space: nowrap;
+    /* Keep content on one line */
+}
+
+.buyer-table td strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+.buyer-table td:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.buyer-table td:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+
+/* Call Report Styles - Tweaks */
+.report-controls {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    background: rgba(20, 20, 30, 0.6);
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.date-check-wrapper {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.btn-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(90deg, #11998e, #38ef7d);
+    /* Green gradient for check */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
+}
+
+.btn-check:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 239, 125, 0.5);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}

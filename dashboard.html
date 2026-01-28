@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuyerHub - Ultra Modern</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        /* --- ANIMATIONS & CORE --- */
+        :root {
+            --primary: #04befe;
+            --secondary: #4481eb;
+            --accent: #ff00de;
+            --dark: #0f0f1a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at top right, #1a1a2e, #0f0f1a);
+            font-family: 'Outfit', sans-serif;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 5px var(--primary);
+            }
+
+            50% {
+                box-shadow: 0 0 15px var(--primary);
+            }
+
+            100% {
+                box-shadow: 0 0 5px var(--primary);
+            }
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px;
+            background: rgba(15, 15, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            color: #fff;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            filter: drop-shadow(0 0 5px var(--primary));
+        }
+
+        .nav-item {
+            padding: 15px;
+            color: #889;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            padding-left: 20px;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(4, 190, 254, 0.1), transparent);
+            color: #fff;
+        }
+
+        .nav-item.active::before {
+            opacity: 1;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .nav-item ion-icon {
+            font-size: 1.4rem;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section {
+            display: none;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .section.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- EXCEL SHEET --- */
+        .excel-toolbar {
+            padding: 15px 25px;
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-fancy {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(4, 190, 254, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-fancy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(4, 190, 254, 0.5);
+        }
+
+        .btn-fancy:active {
+            transform: scale(0.98);
+        }
+
+        .sheet-container {
+            flex: 1;
+            overflow: auto;
+            background: #13131f;
+        }
+
+        .excel-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: max-content;
+            min-width: 100%;
+        }
+
+        .excel-table th {
+            background: #1a1a25;
+            color: #aaa;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: center;
+            /* CENTERED HEADERS */
+        }
+
+        .excel-table td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            height: 40px;
+            padding: 0;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .excel-table tr:hover td {
+            background: rgba(4, 190, 254, 0.05);
+        }
+
+        /* Inputs */
+        .sheet-input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: #ddd;
+            padding: 0 5px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            text-align: center;
+            /* CENTERED CONTENT */
+        }
+
+        .sheet-input:focus {
+            background: rgba(4, 190, 254, 0.1);
+            color: #fff;
+            box-shadow: inset 0 0 0 2px var(--primary);
+        }
+
+        /* DATE ICON FIX - PERFECTLY VISIBLE */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            /* Makes icon white */
+            cursor: pointer;
+            opacity: 0.6;
+            margin-left: 5px;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Dropdowns */
+        select.sheet-input {
+            cursor: pointer;
+            color: #aaa;
+            text-align-last: center;
+        }
+
+        /* text-align-last for chrome select center */
+        select.sheet-input option {
+            background: #1a1a25;
+            color: #fff;
+        }
+
+        /* --- FOOTER --- */
+        .footer-bar {
+            padding: 12px 25px;
+            background: #1a1a25;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-pill {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .jump-input {
+            background: transparent;
+            border: none;
+            width: 40px;
+            color: var(--primary);
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px solid #444;
+        }
+
+        .jump-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* --- REPORT SECTION --- */
+        .report-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .report-table th {
+            text-align: left;
+            padding: 20px;
+            color: #888;
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        .report-table td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 1rem;
+        }
+
+        .report-row {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .report-row:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .report-row:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .report-row:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        /* ... up to 10 for staggered effect */
+
+        .note-bubble {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 0 12px 12px 12px;
+            font-size: 0.9rem;
+            color: #ccc;
+            font-style: italic;
+            display: inline-block;
+            border-left: 2px solid var(--accent);
+        }
+
+        .btn-call-glow {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(56, 239, 125, 0.4);
+            transition: 0.3s;
+        }
+
+        .btn-call-glow:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 0 25px rgba(56, 239, 125, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <ion-icon name="prism-outline" class="logo-icon"></ion-icon>
+                <h2 style="margin:0; letter-spacing:1px;">Buyer<span style="color:var(--primary);">Hub</span></h2>
+            </div>
+            <div id="navBuyer" class="nav-item active" onclick="showSection('buyerData', this)">
+                <ion-icon name="grid-outline"></ion-icon> Master Sheet
+            </div>
+            <div id="navReport" class="nav-item" onclick="showSection('callReport', this)">
+                <ion-icon name="call-outline"></ion-icon> Call Report
+            </div>
+            <div style="margin-top:auto;">
+                <a href="index.html" class="nav-item" style="color:#ff6b6b;"><ion-icon name="power-outline"></ion-icon>
+                    Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <!-- SHEET VIEW -->
+            <div id="buyerData" class="section active">
+                <div class="excel-toolbar">
+                    <button class="btn-fancy" onclick="addNewRows(10)">
+                        <ion-icon name="add-circle-outline" style="font-size:1.2rem;"></ion-icon> Add 10 Rows
+                    </button>
+                    <div style="flex:1;"></div>
+                    <div id="saveStatus"
+                        style="color:#aaa; font-size:0.8rem; display:flex; align-items:center; gap:5px;">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon> Autosave On
+                    </div>
+                </div>
+
+                <div class="sheet-container">
+                    <table class="excel-table">
+                        <thead>
+                            <tr>
+                                <th style="width:60px;">#</th>
+                                <th style="width:140px;">Date</th>
+                                <th style="width:220px;">Buyer Name</th>
+                                <th style="width:140px;">State</th>
+                                <th style="width:140px;">City</th>
+                                <th>Position</th>
+                                <th>Category</th>
+                                <th style="width:140px;">Last Bill</th>
+                                <th>Behavior</th>
+                                <th>Price Range</th>
+                                <th style="width:140px;">Last Call</th>
+                                <th style="width:300px;">Discussion Note</th>
+                                <th
+                                    style="width:140px; color:var(--primary); text-shadow:0 0 10px rgba(4,190,254,0.5);">
+                                    Next Call</th>
+                                <th style="width:60px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="sheetBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="footer-bar">
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <div class="page-pill">
+                            <span id="pageInfo">Page 1</span>
+                        </div>
+
+                        <div class="page-pill">
+                            <span>Go to:</span>
+                            <input type="number" id="jumpPageInput" class="jump-input" placeholder="#"
+                                onkeypress="if(event.key==='Enter') goToPage()">
+                            <ion-icon name="arrow-forward-circle"
+                                style="color:var(--primary); cursor:pointer; font-size:1.2rem;"
+                                onclick="goToPage()"></ion-icon>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-icon" onclick="changePage(-1)"><ion-icon
+                                name="chevron-back"></ion-icon></button>
+                        <button class="btn-icon" onclick="changePage(1)"><ion-icon
+                                name="chevron-forward"></ion-icon></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REPORT VIEW -->
+            <div id="callReport" class="section" style="padding:0;">
+                <div style="max-width:1100px; margin:0 auto; padding:40px; height:100%; overflow-y:auto;">
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:end; margin-bottom:40px; border-bottom:1px solid var(--border); padding-bottom:20px;">
+                        <div>
+                            <h1 class="report-header">Daily Call Report</h1>
+                            <p style="color:#666; margin:5px 0;">Manage your follow-ups efficiently</p>
+                        </div>
+                        <div style="display:flex; gap:15px; align-items:center;">
+                            <div
+                                style="background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:30px; border:1px solid var(--border); display:flex; align-items:center; gap:10px;">
+                                <ion-icon name="calendar-outline" style="color:var(--primary);"></ion-icon>
+                                <input type="date" id="reportDate"
+                                    style="background:transparent; border:none; color:#fff; font-family:inherit; color-scheme:dark;">
+                            </div>
+                            <button class="btn-fancy" onclick="loadReport()" style="padding:8px 20px;">CHECK</button>
+                        </div>
+                    </div>
+
+                    <h3 style="color:#aaa; font-weight:400; margin-bottom:20px;">
+                        Total Pending Calls: <span id="callCount"
+                            style="color:#fff; font-weight:bold; font-size:1.5rem;">0</span>
+                    </h3>
+
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>BUYER DETAILS</th>
+                                <th>LOCATION</th>
+                                <th>TYPE</th>
+                                <th>LAST DISCUSSION</th>
+                                <th style="text-align:center;">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportList">
+                            <!-- JS Renders Rows Here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // --- APP STATE ---
+        let buyers = JSON.parse(localStorage.getItem('buyers')) || [];
+        if (buyers.length === 0) { for (let i = 0; i < 50; i++) buyers.push({ id: Date.now() + i, entryDate: '' }); }
+
+        let currentPage = 1;
+        const ROWS_PER_PAGE = 50;
+
+        // --- SHEET FUNCTIONS ---
+        function renderSheet() {
+            const tbody = document.getElementById('sheetBody');
+            tbody.innerHTML = '';
+
+            const start = (currentPage - 1) * ROWS_PER_PAGE;
+            const end = start + ROWS_PER_PAGE;
+            const pageData = buyers.slice(start, end);
+
+            pageData.forEach((b, i) => {
+                const actualIndex = start + i;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td style="text-align:center; color:#666; font-size:0.8rem;">${actualIndex + 1}</td>
+                <td><input type="date" class="sheet-input" value="${b.entryDate || ''}" onchange="updateCell(${actualIndex}, 'entryDate', this.value)"></td>
+                <td><input type="text" class="sheet-input" value="${b.name || ''}" placeholder="Enter Name" style="font-weight:600; color:#fff;" onchange="updateCell(${actualIndex}, 'name', this.value)"></td>
+                <td><input type="text" class="sheet-input" value="${b.state || ''}" onchange="updateCell(${actualIndex}, 'state', this.value)"></td>
+                <td><input type="text" class="sheet-input" value="${b.city || ''}" onchange="updateCell(${actualIndex}, 'city', this.value)"></td>
+                <td>
+                    <select class="sheet-input" onchange="updateCell(${actualIndex}, 'position', this.value)" style="color:${b.position ? '#fff' : '#777'}">
+                        <option value="" ${!b.position ? 'selected' : ''}></option>
+                        <option value="Shop" ${b.position === 'Shop' ? 'selected' : ''}>Shop</option>
+                        <option value="Showroom" ${b.position === 'Showroom' ? 'selected' : ''}>Showroom</option>
+                        <option value="Hall Sell" ${b.position === 'Hall Sell' ? 'selected' : ''}>Hall Sell</option>
+                    </select>
+                </td>
+                <td>
+                     <select class="sheet-input" onchange="updateCell(${actualIndex}, 'category', this.value)" style="color:${b.category ? '#fff' : '#777'}">
+                        <option value="" ${!b.category ? 'selected' : ''}></option>
+                        <option value="Lengha" ${b.category === 'Lengha' ? 'selected' : ''}>Lengha</option>
+                        <option value="Multi" ${b.category === 'Multi' ? 'selected' : ''}>Multi</option>
+                    </select>
+                </td>
+                <td><input type="date" class="sheet-input" value="${b.lastBill || ''}" onchange="updateCell(${actualIndex}, 'lastBill', this.value)"></td>
+                <td><input type="text" class="sheet-input" value="${b.behavior || ''}" onchange="updateCell(${actualIndex}, 'behavior', this.value)"></td>
+                <td><input type="text" class="sheet-input" value="${b.price || ''}" onchange="updateCell(${actualIndex}, 'price', this.value)"></td>
+                <td><input type="date" class="sheet-input" value="${b.lastCall || ''}" onchange="updateCell(${actualIndex}, 'lastCall', this.value)"></td>
+                <td><input type="text" class="sheet-input" value="${b.note || ''}" onchange="updateCell(${actualIndex}, 'note', this.value)"></td>
+                <td><input type="date" class="sheet-input" value="${b.nextCall || ''}" style="color:var(--primary); font-weight:bold;" onchange="updateCell(${actualIndex}, 'nextCall', this.value)"></td>
+                <td style="text-align:center;">
+                    <ion-icon name="close" style="color:#444; cursor:pointer;" onclick="deleteRow(${actualIndex})"></ion-icon>
+                </td>
+            `;
+                tbody.appendChild(tr);
+            });
+
+            const totalPages = Math.ceil(buyers.length / ROWS_PER_PAGE) || 1;
+            document.getElementById('pageInfo').innerText = `Page ${currentPage} of ${totalPages}`;
+        }
+
+        function changePage(d) {
+            const total = Math.ceil(buyers.length / ROWS_PER_PAGE) || 1;
+            const next = currentPage + d;
+            if (next >= 1 && next <= total) { currentPage = next; renderSheet(); document.querySelector('.sheet-container').scrollTop = 0; }
+        }
+
+        window.goToPage = function () {
+            const p = parseInt(document.getElementById('jumpPageInput').value);
+            const total = Math.ceil(buyers.length / ROWS_PER_PAGE) || 1;
+            if (p >= 1 && p <= total) { currentPage = p; renderSheet(); document.querySelector('.sheet-container').scrollTop = 0; }
+            else { alert("Invalid page"); }
+        }
+
+        window.updateCell = function (idx, f, v) { buyers[idx][f] = v; saveData(); }
+        function saveData() { localStorage.setItem('buyers', JSON.stringify(buyers)); }
+
+        window.addNewRows = function (n) {
+            for (let i = 0; i < n; i++) buyers.push({ id: Date.now() + Math.random(), entryDate: '' });
+            currentPage = Math.ceil(buyers.length / ROWS_PER_PAGE); saveData(); renderSheet();
+        }
+
+        window.deleteRow = function (i) {
+            if (confirm('Delete?')) { buyers.splice(i, 1); saveData(); renderSheet(); }
+        }
+
+        // --- REPORT LOGIC ---
+        window.showSection = function (id, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            if (id === 'callReport') loadReport();
+        }
+
+        window.loadReport = function () {
+            const dInput = document.getElementById('reportDate');
+            if (!dInput.value) { const t = new Date(); dInput.value = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; }
+
+            const date = dInput.value;
+            const list = document.getElementById('reportList');
+            list.innerHTML = '';
+
+            const calls = buyers.filter(b => b.nextCall === date && b.name && b.name.trim());
+            document.getElementById('callCount').innerText = calls.length;
+
+            if (calls.length === 0) {
+                list.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:50px; color:#666; font-size:1.2rem;">✨ No calls pending for <span style="color:var(--primary);">${date}</span> ✨</td></tr>`;
+                return;
+            }
+
+            calls.forEach((b, i) => {
+                const tr = document.createElement('tr');
+                tr.className = 'report-row';
+                tr.style.animationDelay = (i * 0.1) + 's'; // Staggered animation
+                tr.innerHTML = `
+                <td>
+                    <div style="font-size:1.2rem; font-weight:600; color:#fff;">${b.name}</div>
+                    <div style="color:#aaa; font-size:0.85rem; margin-top:5px;">ID: #${b.id.toString().slice(-4)}</div>
+                </td>
+                <td style="color:#ccc;">
+                    <div style="display:flex; align-items:center; gap:8px;"><ion-icon name="location-outline" style="color:var(--primary);"></ion-icon> ${b.city || 'N/A'}</div>
+                    <div style="font-size:0.85rem; margin-left:24px; color:#666;">${b.state || ''}</div>
+                </td>
+                <td>
+                    <span style="background:rgba(4,190,254,0.1); color:var(--primary); padding:5px 12px; border-radius:8px; font-weight:500; border:1px solid rgba(4,190,254,0.2);">${b.position || 'Unknown'}</span>
+                </td>
+                <td>
+                    <div class="note-bubble">${b.note || 'No previous notes'}</div>
+                </td>
+                <td style="text-align:center;">
+                    <a href="tel:+" class="btn-call-glow" title="Call Now">
+                        <ion-icon name="call"></ion-icon>
+                    </a>
+                </td>
+            `;
+                list.appendChild(tr);
+            });
+        }
+
+        renderSheet();
+
+    </script>
+</body>
+
+</html>

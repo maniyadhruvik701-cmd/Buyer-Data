@@ -354,6 +354,7 @@
         .report-header h1 {
             font-size: 2.5rem;
             background: linear-gradient(to right, #fff, #aaa);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
@@ -446,7 +447,8 @@
                 <ion-icon name="call-outline"></ion-icon> Call Report
             </div>
             <div style="margin-top:auto;">
-                <a href="index.html" class="nav-item" style="color:#ff6b6b;"><ion-icon name="power-outline"></ion-icon>
+                <a href="#" onclick="logout()" class="nav-item" style="color:#ff6b6b;"><ion-icon
+                        name="power-outline"></ion-icon>
                     Logout</a>
             </div>
         </aside>
@@ -562,12 +564,30 @@
     </div>
 
     <script>
+        // --- AUTH CHECK ---
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
+
         // --- APP STATE ---
-        let buyers = JSON.parse(localStorage.getItem('buyers')) || [];
-        if (buyers.length === 0) { for (let i = 0; i < 50; i++) buyers.push({ id: Date.now() + i, entryDate: '' }); }
+        const STORAGE_KEY = `buyers_${currentUser.username}`;
+        let buyers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+        // Initialize empty rows only if truly empty
+        if (buyers.length === 0) {
+            for (let i = 0; i < 50; i++) buyers.push({ id: Date.now() + i, entryDate: '' });
+            saveData();
+        }
 
         let currentPage = 1;
         const ROWS_PER_PAGE = 50;
+
+        // --- LOGOUT ---
+        window.logout = function () {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
 
         // --- SHEET FUNCTIONS ---
         function renderSheet() {
@@ -633,7 +653,7 @@
         }
 
         window.updateCell = function (idx, f, v) { buyers[idx][f] = v; saveData(); }
-        function saveData() { localStorage.setItem('buyers', JSON.stringify(buyers)); }
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(buyers)); }
 
         window.addNewRows = function (n) {
             for (let i = 0; i < n; i++) buyers.push({ id: Date.now() + Math.random(), entryDate: '' });
